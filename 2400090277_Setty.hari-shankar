@@ -1,0 +1,83 @@
+import React, { useState } from "react";
+
+const events = [
+  { date: "2025-10-05", title: "Project Meeting", description: "Discuss final project updates" },
+  { date: "2025-10-10", title: "AI Workshop", description: "Attend AI & ML hands-on session" },
+  { date: "2025-10-17", title: "Exam", description: "DBMS Lab Exam" },
+  { date: "2025-10-21", title: "Presentation", description: "Frontend project presentation" },
+];
+
+function App() {
+  const [selectedDate, setSelectedDate] = useState(null);
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const monthName = today.toLocaleString("default", { month: "long" });
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const handleClick = (day) => {
+    const fullDate = ${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")};
+    setSelectedDate(fullDate);
+  };
+
+  const event = events.find((e) => e.date === selectedDate);
+
+  return (
+    <div style={{ textAlign: "center", fontFamily: "Arial", marginTop: "30px" }}>
+      <h2>{monthName} {year}</h2>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(7, 1fr)",
+          gap: "8px",
+          width: "350px",
+          margin: "20px auto",
+        }}
+      >
+        {[...Array(daysInMonth)].map((_, i) => {
+          const day = i + 1;
+          const fullDate = ${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")};
+          const isSelected = selectedDate === fullDate;
+
+          return (
+            <div
+              key={day}
+              onClick={() => handleClick(day)}
+              style={{
+                padding: "10px",
+                borderRadius: "8px",
+                cursor: "pointer",
+                backgroundColor: isSelected ? "#007bff" : "#f3f3f3",
+                color: isSelected ? "white" : "black",
+                fontWeight: isSelected ? "bold" : "normal",
+              }}
+            >
+              {day}
+            </div>
+          );
+        })}
+      </div>
+
+      {selectedDate && (
+        event ? (
+          <div
+            style={{
+              marginTop: "15px",
+              padding: "10px",
+              backgroundColor: "#e8f4ff",
+              borderRadius: "10px",
+              display: "inline-block",
+            }}
+          >
+            <h3>{event.title}</h3>
+            <p>{event.description}</p>
+          </div>
+        ) : (
+          <p style={{ color: "gray" }}>No events on this date.</p>
+        )
+      )}
+    </div>
+  );
+}
+
+export default App;
